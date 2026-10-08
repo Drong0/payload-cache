@@ -1,4 +1,14 @@
 services:
+  app:
+    build: .
+    environment:
+      CACHE_SERVICE_DATABASE_URL: postgresql+asyncpg://cache:cache@db:5432/cache
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:17-alpine
     environment:
@@ -6,7 +16,7 @@ services:
       POSTGRES_PASSWORD: cache
       POSTGRES_DB: cache
     ports:
-      - "5433:5432"
+      - "${DB_PORT:-5433}:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
