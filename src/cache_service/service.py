@@ -63,7 +63,7 @@ class PayloadService:
                 Transformation.input_hash.in_(text_by_hash)
             )
         )
-        cached = {text_by_hash[input_hash]: output for input_hash, output in rows.tuples()}
+        cached = {text_by_hash[input_hash]: output for input_hash, output in rows}
 
         missing = [text for text in texts if text not in cached]
         outputs = await asyncio.gather(*(self._transformer(text) for text in missing))
